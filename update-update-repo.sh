@@ -13,9 +13,9 @@ install_awscli(){
   if ! command -v aws &> /dev/null
   then
     echo "Installing aws cli"
-    curl -O https://bootstrap.pypa.io/get-pip.py && \
-    python3 get-pip.py && \
-    pip3 install 'awscli==1.16' && \
+    curl -O https://bootstrap.pypa.io/get-pip.py
+    sudo python3 get-pip.py
+    sudo pip3 install 'awscli==1.16' && \
     rm get-pip.py
   fi
 }
@@ -74,8 +74,8 @@ save_publi_gpg_key(){
   echo -en  $APT_GPG_PUB_KEY > repo/pub-key.gpg
 }
 
+sudo apt-get update
 sudo apt-get -y install reprepro wget
-sudo install_awscli
 import_prv_key
 get_repo_folders_from_s3
 generate_apt_repo
@@ -85,4 +85,3 @@ sync_repo_to_s3
 echo "usage
 echo 'deb http://travis-ci-deb.s3.us-east-2.amazonaws.com xenial main' > /etc/apt/sources.list.d/travis-packages.list;
 wget -qO - https://travis-ci-deb.s3.us-east-2.amazonaws.com/pub-key.gpg | apt-key add -"
-
