@@ -74,8 +74,8 @@ save_publi_gpg_key(){
   echo -en  $APT_GPG_PUB_KEY > repo/pub-key.gpg
 }
 
-apt-get -y install reprepro wget
-install_awscli
+sudo apt-get -y install reprepro wget
+sudo install_awscli
 import_prv_key
 get_repo_folders_from_s3
 generate_apt_repo
