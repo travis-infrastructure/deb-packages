@@ -17,8 +17,8 @@ install_awscli(){
   then
     echo "Installing aws cli"
     curl -O https://bootstrap.pypa.io/get-pip.py
-    sudo python3 get-pip.py
-    sudo pip3 install 'awscli==1.16' && \
+    sudo -H python3 get-pip.py
+    sudo -H pip3 install 'awscli==1.16' && \
     rm get-pip.py
   fi
 }
