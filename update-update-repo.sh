@@ -79,6 +79,7 @@ save_publi_gpg_key(){
 
 sudo apt-get update
 sudo apt-get -y install reprepro wget
+install_awscli
 import_prv_key
 get_repo_folders_from_s3
 generate_apt_repo
