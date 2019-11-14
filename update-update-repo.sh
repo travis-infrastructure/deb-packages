@@ -50,6 +50,10 @@ get_repo_folders_from_s3(){
   aws s3 cp --recursive  s3://travis-ci-deb/conf/ repo/conf
 }
 
+get_repo_deb_build_folder_from_s3(){
+  aws s3 cp --recursive  s3://travis-ci-deb/deb-builds-tmp ${DIR_DEB_PACKAGES}
+}
+
 sync_repo_to_s3(){
   if [ -d repo/dists/ ];then
     aws s3 sync repo/dists/. s3://travis-ci-deb/dists/ --acl public-read
@@ -82,6 +86,7 @@ sudo apt-get -y install reprepro wget
 install_awscli
 import_prv_key
 get_repo_folders_from_s3
+get_repo_deb_build_folder_from_s3
 generate_apt_repo
 save_publi_gpg_key
 sync_repo_to_s3
