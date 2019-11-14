@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 set -o errexit
 
-# IN VARIABLES
-# APT_GPG_PRV_KEY
-# APT_GPG_PUB_KEY
+#IN VARIABLES
+# APT_GPG_PRV_KEY # encoded with base64 with new lines as \n
+# APT_GPG_PUB_KEY # encoded with base64 with new lines as \n
 # export AWS_ACCESS_KEY_ID=""
 # export AWS_SECRET_ACCESS_KEY=""
 # export AWS_DEFAULT_REGION=us-east-2
 # export DIR_DEB_PACKAGES='/root/deb'
+
+APT_GPG_PRV_KEY=$(echo $APT_GPG_PRV_KEY | base64 -d)
+APT_GPG_PUB_KEY=$(echo $APT_GPG_PUB_KEY | base64 -d)
 
 install_awscli(){
   if ! command -v aws &> /dev/null
