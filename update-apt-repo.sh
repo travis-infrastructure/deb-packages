@@ -31,19 +31,21 @@ generate_apt_repo(){
   mkdir -p repo/conf
 
   cat /dev/null > repo/conf/distributions
-
-  for SUB_DIR_DEB_PACKAGES in "$DIR_DEB_PACKAGES"/*; do
-    APT_VERSION_CODE_NAME=$(basename "$SUB_DIR_DEB_PACKAGES")
+  for APT_REPO_CODENAME in bionic xenial; do
     cat <<EOF >>repo/conf/distributions
 Origin: travis-ci-deb.s3.us-east-2.amazonaws.com
 Label: travis-ci-deb.s3.us-east-2.amazonaws.com
-Codename: ${APT_VERSION_CODE_NAME}
+Codename: ${APT_REPO_CODENAME}
 Architectures: amd64 s390x ppc64le arm64
 Components: main
 Description: Travis CI APT  ubuntu xenial repo
 SignWith: ABF8D524
 
 EOF
+  done
+
+  for SUB_DIR_DEB_PACKAGES in "$DIR_DEB_PACKAGES"/*; do
+    APT_VERSION_CODE_NAME=$(basename "$SUB_DIR_DEB_PACKAGES")
     if [ -d $SUB_DIR_DEB_PACKAGES ];then
       for DEB_FILE_PATH in "$SUB_DIR_DEB_PACKAGES"/*; do
         if [ -f $DEB_FILE_PATH ];then
