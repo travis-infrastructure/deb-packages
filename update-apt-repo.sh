@@ -33,7 +33,7 @@ generate_apt_repo(){
   cat /dev/null > repo/conf/distributions
 
   for SUB_DIR_DEB_PACKAGES in "$DIR_DEB_PACKAGES"/*; do
-    APT_VERSION_CODE_NAME=$(basename "$subdir")
+    APT_VERSION_CODE_NAME=$(basename "$SUB_DIR_DEB_PACKAGES")
     cat <<EOF >>repo/conf/distributions
 Origin: travis-ci-deb.s3.us-east-2.amazonaws.com
 Label: travis-ci-deb.s3.us-east-2.amazonaws.com
