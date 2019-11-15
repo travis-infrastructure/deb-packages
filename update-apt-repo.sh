@@ -42,6 +42,16 @@ Description: Travis CI APT repo
 SignWith: ABF8D524
 EOF
 
+cat <<\EOF >repo/conf/distributions-bionic
+Origin: ttravis-ci-deb.s3.us-east-2.amazonaws.com
+Label: ttravis-ci-deb.s3.us-east-2.amazonaws.com
+Codename: bionic
+Architectures: amd64 s390x ppc64le aarch64
+Components: main
+Description: Travis CI APT repo
+SignWith: ABF8D524
+EOF
+
   reprepro -b repo/ includedeb ${VERSION_CODENAME} ${DIR_DEB_PACKAGES}/*.deb && rc=$? || rc=$?
 }
 
