@@ -1,0 +1,105 @@
+jobs:
+  include:
+    - stage: build deb packages
+      arch: s390x
+      language: minimal
+      dist: xenial
+      env:
+        - REDIS_DEBIAN_VERSION=xenial
+      script:
+        - sudo apt-get install awscli -y
+        - mkdir ${DIR_DEB_PACKAGES}
+        - cd ${TRAVIS_BUILD_DIR}; bash build_router.sh
+        - aws s3 sync ${DIR_DEB_PACKAGES}/. s3://travis-ci-deb/deb-builds-tmp/
+    - stage: build deb packages
+      arch: ppc64le
+      language: minimal
+      dist: xenial
+      env:
+        - REDIS_DEBIAN_VERSION=xenial
+      script:
+        - sudo apt-get install awscli -y
+        - mkdir ${DIR_DEB_PACKAGES}
+        - cd ${TRAVIS_BUILD_DIR}; bash build_router.sh
+        - aws s3 sync ${DIR_DEB_PACKAGES}/. s3://travis-ci-deb/deb-builds-tmp/
+    - stage: build deb packages
+      arch: arm64
+      language: minimal
+      dist: xenial
+      env:
+        - REDIS_DEBIAN_VERSION=xenial
+      script:
+        - sudo apt-get install awscli -y
+        - mkdir ${DIR_DEB_PACKAGES}
+        - cd ${TRAVIS_BUILD_DIR}; bash build_router.sh
+        - aws s3 sync ${DIR_DEB_PACKAGES}/. s3://travis-ci-deb/deb-builds-tmp/
+    - stage: build deb packages
+      arch: amd64
+      language: minimal
+      dist: xenial
+      env:
+        - REDIS_DEBIAN_VERSION=xenial
+      script:
+        - sudo apt-get install awscli -y
+        - mkdir ${DIR_DEB_PACKAGES}
+        - cd ${TRAVIS_BUILD_DIR}; bash build_router.sh
+        - aws s3 sync ${DIR_DEB_PACKAGES}/. s3://travis-ci-deb/deb-builds-tmp/
+    - stage: build deb packages
+      arch: s390x
+      language: minimal
+      dist: bionic
+      env:
+        - REDIS_DEBIAN_VERSION=bionic
+      script:
+        - sudo apt-get install awscli -y
+        - mkdir ${DIR_DEB_PACKAGES}
+        - cd ${TRAVIS_BUILD_DIR}; bash build_router.sh
+        - aws s3 sync ${DIR_DEB_PACKAGES}/. s3://travis-ci-deb/deb-builds-tmp/
+    - stage: build deb packages
+      arch: ppc64le
+      language: minimal
+      dist: bionic
+      env:
+        - REDIS_DEBIAN_VERSION=bionic
+      script:
+        - sudo apt-get install awscli -y
+        - mkdir ${DIR_DEB_PACKAGES}
+        - cd ${TRAVIS_BUILD_DIR}; bash build_router.sh
+        - aws s3 sync ${DIR_DEB_PACKAGES}/. s3://travis-ci-deb/deb-builds-tmp/
+    - stage: build deb packages
+      arch: arm64
+      language: minimal
+      dist: bionic
+      env:
+        - REDIS_DEBIAN_VERSION=bionic
+      script:
+        - sudo apt-get install awscli -y
+        - mkdir ${DIR_DEB_PACKAGES}
+        - cd ${TRAVIS_BUILD_DIR}; bash build_router.sh
+        - aws s3 sync ${DIR_DEB_PACKAGES}/. s3://travis-ci-deb/deb-builds-tmp/
+    - stage: build deb packages
+      arch: amd64
+      language: minimal
+      dist: bionic
+      env:
+        - REDIS_DEBIAN_VERSION=bionic
+      script:
+        - sudo apt-get install awscli -y
+        - mkdir ${DIR_DEB_PACKAGES}
+        - cd ${TRAVIS_BUILD_DIR}; bash build_router.sh
+        - aws s3 sync ${DIR_DEB_PACKAGES}/. s3://travis-ci-deb/deb-builds-tmp/
+    - stage: build apt repo
+      arch: amd64
+      language: minimal
+      dist: xenial
+      script:
+        - __dots() { while true ; do echo -en . ; sleep 30 ; done } ; __dots &
+        - cd ${TRAVIS_BUILD_DIR}; bash update-apt-repo.sh
+      after_success:
+        - aws s3 rm --recursive s3://travis-ci-deb/deb-builds-tmp # clean up after ourselves
+os: linux
+env:
+  global:
+  - DIR_DEB_PACKAGES=~/deb/
+  - DEB_PACKAGE_NAME=redis # redis, ...
+  - REDIS_VERSION=5.0.6
