@@ -35,7 +35,7 @@ generate_apt_repo(){
   cat <<\EOF >repo/conf/distributions
 Origin: travis-ci-deb.s3.us-east-2.amazonaws.com
 Label: travis-ci-deb.s3.us-east-2.amazonaws.com
-Codename: xenial bionic
+Codename: xenial
 Architectures: amd64 s390x ppc64le aarch64
 Components: main
 Description: Travis CI APT repo
