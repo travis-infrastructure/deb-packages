@@ -28,8 +28,8 @@ build_redis(){
 build_redis
 
 #main
-mkdir redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}${ARCH}
-pushd redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}${ARCH}
+mkdir redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}-${ARCH}
+pushd redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}-${ARCH}
 
 mkdir -p etc/init.d DEBIAN etc/redis usr/src/redis-tmp usr/local/bin/ var/log/redis/
 
@@ -218,9 +218,9 @@ chmod 640 etc/redis/redis.conf
 popd
 
 echo "cp from redis-${REDIS_VERSION}"
-cp -a redis-${REDIS_VERSION}/src/redis-check-aof redis-${REDIS_VERSION}/src/redis-check-rdb redis-${REDIS_VERSION}/src/redis-cli redis-${REDIS_VERSION}/src/redis-benchmark redis-${REDIS_VERSION}/src/redis-server redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}${ARCH}/usr/local/bin/
+cp -a redis-${REDIS_VERSION}/src/redis-check-aof redis-${REDIS_VERSION}/src/redis-check-rdb redis-${REDIS_VERSION}/src/redis-cli redis-${REDIS_VERSION}/src/redis-benchmark redis-${REDIS_VERSION}/src/redis-server redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}-${ARCH}/usr/local/bin/
 
-dpkg-deb --build redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}${ARCH}
+dpkg-deb --build redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}-${ARCH}
 
-echo "Moving redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}${ARCH}.deb to ${DIR_DEB_PACKAGES}"
-mv redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}${ARCH}.deb ${DIR_DEB_PACKAGES}/
+echo "Moving redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}-${ARCH}.deb to ${DIR_DEB_PACKAGES}"
+mv redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}-${ARCH}.deb ${DIR_DEB_PACKAGES}/
