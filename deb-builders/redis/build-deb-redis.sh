@@ -7,6 +7,8 @@ set -o errexit
 
 ARCH=$(uname -m)
 
+if [ $ARCH == "x86_64" ];then ARCH=amd64; fi
+
 if [ -z $REDIS_VERSION ];then
   REDIS_VERSION=5.0.6
   echo "No provide REDIS_VERSION env, setting it to 5.0.6"
