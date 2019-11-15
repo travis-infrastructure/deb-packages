@@ -2,13 +2,19 @@
 set -o errexit
 
 #DIR_DEB_PACKAGES=~/deb
-#REDIS_VERSION - redis version, def 5.06
+#REDIS_VERSION= - redis version, def 5.0.6
+#REDIS_DEBIAN_VERSION= def to xenial (usage as xenial1, xenial2)
 
 ARCH=$(uname -m)
 
 if [ -z $REDIS_VERSION ];then
   REDIS_VERSION=5.0.6
   echo "No provide REDIS_VERSION env, setting it to 5.0.6"
+fi
+
+if [ -z $REDIS_DEBIAN_VERSION ];then
+  REDIS_DEBIAN_VERSION="~xenial"
+  echo "No provide REDIS_DEBIAN_VERSION env, setting it to ${REDIS_DEBIAN_VERSION}"
 fi
 
 build_redis(){
@@ -22,8 +28,8 @@ build_redis(){
 build_redis
 
 #main
-mkdir redis-${REDIS_VERSION}-xenial1_${ARCH}
-pushd redis-${REDIS_VERSION}-xenial1_${ARCH}
+mkdir redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}${ARCH}
+pushd redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}${ARCH}
 
 mkdir -p etc/init.d DEBIAN etc/redis usr/src/redis-tmp usr/local/bin/ var/log/redis/
 
@@ -38,7 +44,7 @@ chmod +x DEBIAN/postinst
 
 cat <<EOF >DEBIAN/control
 Package: redis-server
-Version: ${REDIS_VERSION}-xenial
+Version: ${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}
 Section: base
 Priority: optional
 Architecture: ${ARCH}
@@ -212,9 +218,9 @@ chmod 640 etc/redis/redis.conf
 popd
 
 echo "cp from redis-${REDIS_VERSION}"
-cp -a redis-${REDIS_VERSION}/src/redis-check-aof redis-${REDIS_VERSION}/src/redis-check-rdb redis-${REDIS_VERSION}/src/redis-cli redis-${REDIS_VERSION}/src/redis-benchmark redis-${REDIS_VERSION}/src/redis-server redis-${REDIS_VERSION}-xenial1_${ARCH}/usr/local/bin/
+cp -a redis-${REDIS_VERSION}/src/redis-check-aof redis-${REDIS_VERSION}/src/redis-check-rdb redis-${REDIS_VERSION}/src/redis-cli redis-${REDIS_VERSION}/src/redis-benchmark redis-${REDIS_VERSION}/src/redis-server redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}${ARCH}/usr/local/bin/
 
-dpkg-deb --build redis-${REDIS_VERSION}-xenial1_${ARCH}
+dpkg-deb --build redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}${ARCH}
 
-echo "Moving redis-${REDIS_VERSION}-xenial1_${ARCH}.deb to ${DIR_DEB_PACKAGES}"
-mv redis-${REDIS_VERSION}-xenial1_${ARCH}.deb ${DIR_DEB_PACKAGES}/
+echo "Moving redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}${ARCH}.deb to ${DIR_DEB_PACKAGES}"
+mv redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}${ARCH}.deb ${DIR_DEB_PACKAGES}/

@@ -40,7 +40,7 @@ Description: Travis CI APT repo
 SignWith: ABF8D524
 EOF
 
-  reprepro -b repo/ includedeb xenial ${DIR_DEB_PACKAGES}/*.deb
+  reprepro -b repo/ includedeb xenial ${DIR_DEB_PACKAGES}/*.deb && rc=$? || rc=$?
 }
 
 get_repo_folders_from_s3(){
