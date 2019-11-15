@@ -225,4 +225,4 @@ cp -a redis-${REDIS_VERSION}/src/redis-check-aof redis-${REDIS_VERSION}/src/redi
 
 dpkg-deb --build redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}-${ARCH}
 
-prepare_deb_file "redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}-${ARCH}.deb" "${DIR_DEB_PACKAGES}/${VERSION_CODENAME}"
+prepare_deb_file $(realpath "redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}-${ARCH}.deb") "${DIR_DEB_PACKAGES}/${VERSION_CODENAME}"

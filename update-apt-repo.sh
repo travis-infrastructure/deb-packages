@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -o errexit
 
-source /etc/os-release
-
 #IN VARIABLES
 # APT_GPG_PRV_KEY # encoded with base64 with new lines as \n
 # APT_GPG_PUB_KEY # encoded with base64 with new lines as \n
@@ -32,28 +30,28 @@ import_prv_key(){
 generate_apt_repo(){
   mkdir -p repo/conf
 
-  cat <<\EOF >repo/conf/distributions
-Origin: travis-ci-deb.s3.us-east-2.amazonaws.com
-Label: travis-ci-deb.s3.us-east-2.amazonaws.com
-Codename: xenial
-Architectures: amd64 s390x ppc64le aarch64
-Components: main
-Description: Travis CI APT  ubuntu xenial repo
-SignWith: ABF8D524
+  cat /dev/null > repo/conf/distributions
+
+  for SUB_DIR_DEB_PACKAGES in "$DIR_DEB_PACKAGES"/*; do
+    APT_VERSION_CODE_NAME=$(basename "$subdir")
+    cat <<EOF >>repo/conf/distributions
+  Origin: travis-ci-deb.s3.us-east-2.amazonaws.com
+  Label: travis-ci-deb.s3.us-east-2.amazonaws.com
+  Codename: ${APT_VERSION_CODE_NAME}
+  Architectures: amd64 s390x ppc64le aarch64
+  Components: main
+  Description: Travis CI APT  ubuntu xenial repo
+  SignWith: ABF8D524
 
 EOF
-
-cat <<\EOF >>repo/conf/distributions
-Origin: travis-ci-deb.s3.us-east-2.amazonaws.com
-Label: travis-ci-deb.s3.us-east-2.amazonaws.com
-Codename: bionic
-Architectures: amd64 s390x ppc64le aarch64
-Components: main
-Description: Travis CI APT ubuntu bionic repo
-SignWith: ABF8D524
-EOF
-
-  reprepro -b repo/ includedeb ${VERSION_CODENAME} ${DIR_DEB_PACKAGES}/*.deb && rc=$? || rc=$?
+    if [ -d $SUB_DIR_DEB_PACKAGES ];then
+      for DEB_FILE_PATH in "$SUB_DIR_DEB_PACKAGES"/*; do
+        if [ -f $DEB_FILE_PATH ];then
+          reprepro -b repo/ includedeb ${APT_VERSION_CODE_NAME} ${DEB_FILE_PATH} && rc=$? || rc=$?
+        fi
+      done
+    fi
+  done
 }
 
 get_repo_folders_from_s3(){
