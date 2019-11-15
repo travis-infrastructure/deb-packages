@@ -9,6 +9,7 @@ source deb-builders/lib.sh
 ARCH=$(uname -m)
 
 if [ $ARCH == "x86_64" ];then ARCH=amd64; fi
+if [ $ARCH == "aarch64" ];then ARCH=arm64; fi
 
 if [ -z $REDIS_VERSION ];then
   REDIS_VERSION=5.0.6
