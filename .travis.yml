@@ -1,3 +1,0 @@
-arch: s390x
-script:
-- uname -m
