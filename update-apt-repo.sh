@@ -104,7 +104,7 @@ generate_apt_repo
 save_publi_gpg_key
 sync_repo_to_s3
 
-echo "USAGE
+echo "USAGE example for redi-server on xenial
 echo 'deb http://travis-ci-deb.s3.us-east-2.amazonaws.com xenial main' > /etc/apt/sources.list.d/travis-packages.list;
 echo -e \"Package: redis-server\nPin: release o=travis-ci-deb.s3.us-east-2.amazonaws.com\nPin-Priority: 900\" > /etc/apt/preferences.d/redis
 wget -qO - https://travis-ci-deb.s3.us-east-2.amazonaws.com/pub-key.gpg | apt-key add -"
