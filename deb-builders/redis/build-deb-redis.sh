@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -o errexit
-
+source /etc/os-release
+source ../lib.sh
 #DIR_DEB_PACKAGES=~/deb
 #REDIS_VERSION= - redis version, def 5.0.6
 #REDIS_DEBIAN_VERSION= def to xenial (usage as xenial1, xenial2)
@@ -224,5 +225,4 @@ cp -a redis-${REDIS_VERSION}/src/redis-check-aof redis-${REDIS_VERSION}/src/redi
 
 dpkg-deb --build redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}-${ARCH}
 
-echo "Moving redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}-${ARCH}.deb to ${DIR_DEB_PACKAGES}"
-mv redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}-${ARCH}.deb ${DIR_DEB_PACKAGES}/
+prepare_deb_file "redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}-${ARCH}.deb" "${DIR_DEB_PACKAGES}/${VERSION_CODENAME}"

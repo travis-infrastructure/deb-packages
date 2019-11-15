@@ -38,18 +38,18 @@ Label: travis-ci-deb.s3.us-east-2.amazonaws.com
 Codename: xenial
 Architectures: amd64 s390x ppc64le aarch64
 Components: main
-Description: Travis CI APT repo
+Description: Travis CI APT  ubuntu xenial repo
 SignWith: ABF8D524
 
 EOF
 
 cat <<\EOF >>repo/conf/distributions
-Origin: ttravis-ci-deb.s3.us-east-2.amazonaws.com
-Label: ttravis-ci-deb.s3.us-east-2.amazonaws.com
+Origin: travis-ci-deb.s3.us-east-2.amazonaws.com
+Label: travis-ci-deb.s3.us-east-2.amazonaws.com
 Codename: bionic
 Architectures: amd64 s390x ppc64le aarch64
 Components: main
-Description: Travis CI APT repo
+Description: Travis CI APT ubuntu bionic repo
 SignWith: ABF8D524
 EOF
 
