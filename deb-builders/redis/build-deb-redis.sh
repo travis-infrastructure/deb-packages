@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -o errexit
 source /etc/os-release
-source ../lib.sh
+source deb-builders/lib.sh
 #DIR_DEB_PACKAGES=~/deb
 #REDIS_VERSION= - redis version, def 5.0.6
 #REDIS_DEBIAN_VERSION= def to xenial (usage as xenial1, xenial2)
