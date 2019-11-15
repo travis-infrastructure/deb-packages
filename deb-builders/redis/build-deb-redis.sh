@@ -16,7 +16,7 @@ if [ -z $REDIS_VERSION ];then
 fi
 
 if [ -z $REDIS_DEBIAN_VERSION ];then
-  REDIS_DEBIAN_VERSION="~xenial"
+  REDIS_DEBIAN_VERSION="xenial"
   echo "No provide REDIS_DEBIAN_VERSION env, setting it to ${REDIS_DEBIAN_VERSION}"
 fi
 

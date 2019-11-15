@@ -35,13 +35,13 @@ generate_apt_repo(){
   for SUB_DIR_DEB_PACKAGES in "$DIR_DEB_PACKAGES"/*; do
     APT_VERSION_CODE_NAME=$(basename "$subdir")
     cat <<EOF >>repo/conf/distributions
-  Origin: travis-ci-deb.s3.us-east-2.amazonaws.com
-  Label: travis-ci-deb.s3.us-east-2.amazonaws.com
-  Codename: ${APT_VERSION_CODE_NAME}
-  Architectures: amd64 s390x ppc64le aarch64
-  Components: main
-  Description: Travis CI APT  ubuntu xenial repo
-  SignWith: ABF8D524
+Origin: travis-ci-deb.s3.us-east-2.amazonaws.com
+Label: travis-ci-deb.s3.us-east-2.amazonaws.com
+Codename: ${APT_VERSION_CODE_NAME}
+Architectures: amd64 s390x ppc64le aarch64
+Components: main
+Description: Travis CI APT  ubuntu xenial repo
+SignWith: ABF8D524
 
 EOF
     if [ -d $SUB_DIR_DEB_PACKAGES ];then
