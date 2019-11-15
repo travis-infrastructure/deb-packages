@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -o errexit
 
+source /etc/os-release
+
 #IN VARIABLES
 # APT_GPG_PRV_KEY # encoded with base64 with new lines as \n
 # APT_GPG_PUB_KEY # encoded with base64 with new lines as \n
@@ -33,14 +35,14 @@ generate_apt_repo(){
   cat <<\EOF >repo/conf/distributions
 Origin: travis-ci-deb.s3.us-east-2.amazonaws.com
 Label: travis-ci-deb.s3.us-east-2.amazonaws.com
-Codename: xenial
-Architectures: x86_64 s390x ppc64le arm64
+Codename: xenial bionic
+Architectures: x86_64 s390x ppc64le aarch64
 Components: main
 Description: Travis CI APT repo
 SignWith: ABF8D524
 EOF
 
-  reprepro -b repo/ includedeb xenial ${DIR_DEB_PACKAGES}/*.deb && rc=$? || rc=$?
+  reprepro -b repo/ includedeb ${VERSION_CODENAME} ${DIR_DEB_PACKAGES}/*.deb && rc=$? || rc=$?
 }
 
 get_repo_folders_from_s3(){
