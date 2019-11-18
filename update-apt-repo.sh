@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -o errexit
+APT_REPO_CODENAMES="bionic xenial"
 
 #IN VARIABLES
 # APT_GPG_PRV_KEY # encoded with base64 with new lines as \n
@@ -31,7 +32,7 @@ generate_apt_repo(){
   mkdir -p repo/conf
 
   cat /dev/null > repo/conf/distributions
-  for APT_REPO_CODENAME in bionic xenial; do
+  for APT_REPO_CODENAME in $APT_REPO_CODENAMES; do
     cat <<EOF >>repo/conf/distributions
 Origin: travis-ci-deb.s3.us-east-2.amazonaws.com
 Label: travis-ci-deb.s3.us-east-2.amazonaws.com
@@ -104,7 +105,7 @@ generate_apt_repo
 save_publi_gpg_key
 sync_repo_to_s3
 
-echo "USAGE example for redi-server on xenial
+echo "USAGE example for redis-server on xenial
 echo 'deb http://travis-ci-deb.s3.us-east-2.amazonaws.com xenial main' > /etc/apt/sources.list.d/travis-packages.list;
 echo -e \"Package: redis-server\nPin: release o=travis-ci-deb.s3.us-east-2.amazonaws.com\nPin-Priority: 900\" > /etc/apt/preferences.d/redis
 wget -qO - https://travis-ci-deb.s3.us-east-2.amazonaws.com/pub-key.gpg | apt-key add -"
