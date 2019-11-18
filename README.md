@@ -9,7 +9,7 @@ Repository handle multi codename versions at main software.
 **REDIS_VERSION**=5.0.6     # version of package to build
 **REDIS_DEBIAN_VERSION**    # version od debian-like system package, example: xenial, xenial1
 
-#Adding new builder
+# Adding new builder
 - Create new appropriate builder
 Create new builder in **dir deb-builders/[NEW_BUILDER_NAME]/build-deb-[NEW_BUILDER_NAME].sh**
 Example: `deb-builders/redis/build-deb-redis.sh`
