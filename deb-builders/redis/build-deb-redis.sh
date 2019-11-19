@@ -8,15 +8,15 @@ source deb-builders/lib.sh
 
 ARCH=$(uname -m)
 
-if [ $ARCH == "x86_64" ];then ARCH=amd64; fi
-if [ $ARCH == "aarch64" ];then ARCH=arm64; fi
+if [ "$ARCH" == "x86_64" ];then ARCH=amd64; fi
+if [ "$ARCH" == "aarch64" ];then ARCH=arm64; fi
 
-if [ -z $REDIS_VERSION ];then
+if [ -z "$REDIS_VERSION" ];then
   REDIS_VERSION=5.0.6
   echo "No provide REDIS_VERSION env, setting it to 5.0.6"
 fi
 
-if [ -z $REDIS_DEBIAN_VERSION ];then
+if [ -z "$REDIS_DEBIAN_VERSION" ];then
   REDIS_DEBIAN_VERSION=${VERSION_CODENAME}
   echo "No provide REDIS_DEBIAN_VERSION env, setting it to ${REDIS_DEBIAN_VERSION}"
 fi
@@ -32,8 +32,8 @@ build_redis(){
 build_redis
 
 #main
-mkdir redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}-${ARCH}
-pushd redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}-${ARCH}
+mkdir "redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}-${ARCH}"
+pushd "redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}-${ARCH}"
 
 mkdir -p etc/init.d DEBIAN etc/redis usr/src/redis-tmp usr/local/bin/ var/log/redis/
 
@@ -224,6 +224,6 @@ popd
 echo "cp from redis-${REDIS_VERSION}"
 cp -a redis-${REDIS_VERSION}/src/redis-check-aof redis-${REDIS_VERSION}/src/redis-check-rdb redis-${REDIS_VERSION}/src/redis-cli redis-${REDIS_VERSION}/src/redis-benchmark redis-${REDIS_VERSION}/src/redis-server redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}-${ARCH}/usr/local/bin/
 
-dpkg-deb --build redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}-${ARCH}
+dpkg-deb --build "redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}-${ARCH}"
 
-prepare_deb_file $(realpath "redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}-${ARCH}.deb") "${DIR_DEB_PACKAGES}/${VERSION_CODENAME}"
+prepare_deb_file "$(realpath "redis-${REDIS_VERSION}~${REDIS_DEBIAN_VERSION}-${ARCH}.deb")" "${DIR_DEB_PACKAGES}/${VERSION_CODENAME}"

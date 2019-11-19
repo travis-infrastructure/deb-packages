@@ -10,8 +10,8 @@ APT_REPO_CODENAMES="bionic xenial"
 # export AWS_DEFAULT_REGION=us-east-2
 # export DIR_DEB_PACKAGES='/root/deb'
 
-APT_GPG_PRV_KEY=$(echo $APT_GPG_PRV_KEY | base64 -d)
-APT_GPG_PUB_KEY=$(echo $APT_GPG_PUB_KEY | base64 -d)
+APT_GPG_PRV_KEY=$(echo "$APT_GPG_PRV_KEY" | base64 -d)
+APT_GPG_PUB_KEY=$(echo "$APT_GPG_PUB_KEY" | base64 -d)
 
 install_awscli(){
   if ! command -v aws &> /dev/null
@@ -25,7 +25,7 @@ install_awscli(){
 }
 
 import_prv_key(){
-  echo -en  $APT_GPG_PRV_KEY | gpg2 --allow-secret-key-import --import
+  echo -en  "$APT_GPG_PRV_KEY" | gpg2 --allow-secret-key-import --import
 }
 
 generate_apt_repo(){
@@ -47,10 +47,13 @@ EOF
 
   for SUB_DIR_DEB_PACKAGES in "$DIR_DEB_PACKAGES"/*; do
     APT_VERSION_CODE_NAME=$(basename "$SUB_DIR_DEB_PACKAGES")
-    if [ -d $SUB_DIR_DEB_PACKAGES ];then
+    if [ -d "$SUB_DIR_DEB_PACKAGES" ];then
       for DEB_FILE_PATH in "$SUB_DIR_DEB_PACKAGES"/*; do
-        if [ -f $DEB_FILE_PATH ];then
-          reprepro -b repo/ includedeb ${APT_VERSION_CODE_NAME} ${DEB_FILE_PATH} && rc=$? || rc=$?
+        if [ -f "$DEB_FILE_PATH" ];then
+          reprepro -b repo/ includedeb "${APT_VERSION_CODE_NAME}" "${DEB_FILE_PATH}" && rc=$? || rc=$?
+          if [ $rc -ne 0 ];then
+            echo "There was some problems while generating repo"
+          fi
         fi
       done
     fi
@@ -65,7 +68,7 @@ get_repo_folders_from_s3(){
 }
 
 get_repo_deb_build_folder_from_s3(){
-  aws s3 cp --recursive  s3://travis-ci-deb/deb-builds-tmp ${DIR_DEB_PACKAGES}
+  aws s3 cp --recursive  s3://travis-ci-deb/deb-builds-tmp "${DIR_DEB_PACKAGES}"
 }
 
 sync_repo_to_s3(){
@@ -92,7 +95,7 @@ sync_repo_to_s3(){
 }
 
 save_publi_gpg_key(){
-  echo -en  $APT_GPG_PUB_KEY > repo/pub-key.gpg
+  echo -en  "$APT_GPG_PUB_KEY" > repo/pub-key.gpg
 }
 
 sudo apt-get update
