@@ -151,7 +151,7 @@ exit 0
 
 EOF
 
-chmod 7555 etc/init.d/redis-server
+chmod 755 etc/init.d/redis-server
 
 cat <<\EOF >etc/redis/redis.conf
 daemonize yes
