@@ -11,6 +11,7 @@ source deb-builders/lib.sh
 #DIR_DEB_PACKAGES=~/deb
 #MONGODB_VERSION=
 #MONGODB_DEBIAN_VERSION=
+#MONGODB_DEBIAN_VERSION_EPOCH=
 
 ARCH=$(uname -m)
 
@@ -27,9 +28,19 @@ if [ -z "$MONGODB_DEBIAN_VERSION" ];then
   echo "No provide MONGODB_DEBIAN_VERSION env, setting it to ${MONGODB_DEBIAN_VERSION}"
 fi
 
+if [ -z "${MONGODB_DEBIAN_VERSION_EPOCH}" ];then
+  MONGODB_DEBIAN_VERSION_EPOCH="${MONGODB_DEBIAN_VERSION_EPOCH}:"
+fi
+
 install_packages(){
   apt-get update
-  apt-get install -y --no-install-recommends gcc clang-6.0 libcurl4-gnutls-dev build-essential libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-thread-dev  python2.7 python-pip python-dev libffi-dev libssl-dev libxml2-dev libxslt1-dev libjpeg8-dev zlib1g-dev python-setuptools wget 
+  apt-get install -y --no-install-recommends gcc clang-6.0 libcurl4-gnutls-dev build-essential libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-thread-dev  python2.7 python-pip python-dev libffi-dev libssl-dev libxml2-dev libxslt1-dev libjpeg8-dev zlib1g-dev python-setuptools wget
+}
+
+install_packages_s390x(){
+  apt-get update
+  add-apt-repository universe
+  apt-get install -y --no-install-recommends gcc clang-3.8 libcurl4-gnutls-dev build-essential libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-thread-dev  python2.7 python-pip python-dev libffi-dev libssl-dev libxml2-dev libxslt1-dev libjpeg8-dev zlib1g-dev python-setuptools wget
 }
 
 build_mongodb(){
@@ -41,7 +52,7 @@ build_mongodb(){
   popd
 }
 
-install_packages
+call_build_function func_name="install_packages"
 build_mongodb
 
 #main
@@ -64,7 +75,7 @@ chmod +x DEBIAN/postinst
 
 cat <<EOF >DEBIAN/control
 Package: mongodb-server
-Version: ${MONGODB_VERSION}~${MONGODB_DEBIAN_VERSION}
+Version: ${MONGODB_DEBIAN_VERSION_EPOCH}${MONGODB_VERSION}~${MONGODB_DEBIAN_VERSION}
 Section: database
 Priority: optional
 Architecture: ${ARCH}
@@ -139,7 +150,7 @@ chmod 644 opt/mongo/etc/mongod.conf
 popd
 
 echo "cp from /opt/mongo/bin"
-cp -a /opt/mongo/bin mongodb-${MONGODB_VERSION}~${MONGODB_DEBIAN_VERSION}-${ARCH}/opt/mongo/
+cp -a /opt/mongo/bin "mongodb-${MONGODB_VERSION}~${MONGODB_DEBIAN_VERSION}-${ARCH}/opt/mongo/"
 
 dpkg-deb --build "mongodb-${MONGODB_VERSION}~${MONGODB_DEBIAN_VERSION}-${ARCH}"
 
