@@ -17,6 +17,7 @@ ARCH=$(uname -m)
 
 if [ "$ARCH" == "x86_64" ];then ARCH=amd64; fi
 if [ "$ARCH" == "aarch64" ];then ARCH=arm64; fi
+if [ "$ARCH" == "ppc64le" ];then ARCH=ppc64el; fi
 
 if [ -z "$MONGODB_VERSION" ];then
   MONGODB_VERSION=4.0.13
