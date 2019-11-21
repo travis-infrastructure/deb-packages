@@ -13,6 +13,17 @@ source deb-builders/lib.sh
 #MONGODB_DEBIAN_VERSION=
 #MONGODB_DEBIAN_VERSION_EPOCH=
 
+
+# apt-get install -y  git
+# git clone https://github.com/travis-infrastructure/deb-packages.git
+# cd deb-packages
+# git checkout mongodb
+# export MONGODB_DEBIAN_VERSION=bionic
+# export MONGODB_VERSION=4.2.1
+# export DIR_DEB_PACKAGES=~/deb/
+# export DEB_PACKAGE_NAME=mongodb
+# export MONGODB_DEBIAN_VERSION_EPOCH=1
+
 ARCH="$(get_arch)"
 
 if [ -z "$MONGODB_VERSION" ];then
@@ -41,8 +52,16 @@ install_packages(){
 
 install_packages_s390x(){
   apt-get update
+  apt-get install -y software-properties-common
   add-apt-repository universe
   apt-get install -y --no-install-recommends gcc clang-3.8 libcurl4-gnutls-dev build-essential libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-thread-dev  python2.7 python-pip python-dev libffi-dev libssl-dev libxml2-dev libxslt1-dev libjpeg8-dev zlib1g-dev python-setuptools wget
+}
+
+install_packages_bionic(){
+  apt-get update
+  apt-get install -y software-properties-common
+  add-apt-repository universe
+  apt-get install -y --no-install-recommends gcc clang-3.8 libcurl4-gnutls-dev build-essential libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-thread-dev  python3-pip python3-dev libffi-dev libssl-dev libxml2-dev libxslt1-dev libjpeg8-dev zlib1g-dev python-setuptools wget
 }
 
 build_mongodb(){
@@ -71,6 +90,11 @@ adduser --system --no-create-home --group --home /var/lib/mongodb mongodb
 chown mongodb:mongodb /var/lib/mongodb
 mkdir -p /var/log/mongodb
 chown mongodb:mongodb /var/log/mongodb
+
+update-alternatives --install /usr/local/bin/mongo mongo /opt/mongo/bin/mongo 50
+update-alternatives --install /usr/local/bin/mongod mongod /opt/mongo/bin/mongod 50
+update-alternatives --install /usr/local/bin/mongos mongos /opt/mongo/bin/mongos 50
+
 EOF
 
 chmod +x DEBIAN/postinst
