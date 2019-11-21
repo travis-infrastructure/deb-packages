@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 set -o errexit
+
+if [ "$(id -u 2>/dev/null)" -ne 0 ];then
+  echo "Need to run as root"
+  exit 1
+fi
+
 source /etc/os-release
 source deb-builders/lib.sh
 #DIR_DEB_PACKAGES=~/deb
