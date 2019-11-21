@@ -37,7 +37,7 @@ generate_apt_repo(){
 Origin: travis-ci-deb.s3.us-east-2.amazonaws.com
 Label: travis-ci-deb.s3.us-east-2.amazonaws.com
 Codename: ${APT_REPO_CODENAME}
-Architectures: amd64 s390x ppc64le arm64
+Architectures: amd64 s390x ppc64el arm64
 Components: main
 Description: Travis CI APT  ubuntu xenial repo
 SignWith: ABF8D524
