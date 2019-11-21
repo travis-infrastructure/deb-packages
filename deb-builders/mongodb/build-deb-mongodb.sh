@@ -13,15 +13,16 @@ source deb-builders/lib.sh
 #MONGODB_DEBIAN_VERSION=
 #MONGODB_DEBIAN_VERSION_EPOCH=
 
-ARCH=$(uname -m)
-
-if [ "$ARCH" == "x86_64" ];then ARCH=amd64; fi
-if [ "$ARCH" == "aarch64" ];then ARCH=arm64; fi
-if [ "$ARCH" == "ppc64le" ];then ARCH=ppc64el; fi
+ARCH="$(get_arch)"
 
 if [ -z "$MONGODB_VERSION" ];then
   MONGODB_VERSION=4.0.13
   echo "No provide MONGODB_VERSION env, setting it to ${MONGODB_VERSION}"
+fi
+
+if [ -z "${VERSION_CODENAME}" ];then
+  echo "Please provice VERSION_CODENAME var, couldn't read from os-release"
+  exit 1
 fi
 
 if [ -z "$MONGODB_DEBIAN_VERSION" ];then

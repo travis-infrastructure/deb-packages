@@ -21,7 +21,7 @@ prepare_deb_file(){
 call_build_function(){
   local func_name dist_codename "${@}"
   local func_arch_name func_dist_codename func_dist_arch_name
-  ARCH=$(uname -m)
+  ARCH="$(get_arch)"
   if [ "$ARCH" == "x86_64" ];then ARCH=amd64; fi
   if [ "$ARCH" == "aarch64" ];then ARCH=arm64; fi
   if [ "$ARCH" == "ppc64le" ];then ARCH=ppc64el; fi
@@ -47,4 +47,13 @@ call_build_function(){
     #echo "Calling build function: ${func_name}"
     $func_name
   fi
+}
+
+get_arch(){
+  ARCH=$(uname -m)
+
+  if [ "$ARCH" == "x86_64" ];then ARCH=amd64; fi
+  if [ "$ARCH" == "aarch64" ];then ARCH=arm64; fi
+  if [ "$ARCH" == "ppc64le" ];then ARCH=ppc64el; fi
+  echo "$ARCH"
 }
