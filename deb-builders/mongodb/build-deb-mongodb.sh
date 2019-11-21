@@ -22,8 +22,8 @@ if [ -z "$MONGODB_DEBIAN_VERSION" ];then
 fi
 
 install_packages(){
-  apt-get update
-  apt-get install gcc clang-6.0 libcurl4-gnutls-dev build-essential libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-thread-dev  python2.7 python-pip python-dev libffi-dev libssl-dev libxml2-dev libxslt1-dev libjpeg8-dev zlib1g-dev
+  sudo apt-get update
+  sudo apt-get install gcc clang-6.0 libcurl4-gnutls-dev build-essential libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-thread-dev  python2.7 python-pip python-dev libffi-dev libssl-dev libxml2-dev libxslt1-dev libjpeg8-dev zlib1g-dev
 }
 
 build_mongodb(){
