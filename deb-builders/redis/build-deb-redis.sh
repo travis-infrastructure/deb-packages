@@ -6,10 +6,7 @@ source deb-builders/lib.sh
 #REDIS_VERSION= - redis version, def 5.0.6
 #REDIS_DEBIAN_VERSION= def to xenial (usage as xenial1, xenial2)
 
-ARCH=$(uname -m)
-
-if [ "$ARCH" == "x86_64" ];then ARCH=amd64; fi
-if [ "$ARCH" == "aarch64" ];then ARCH=arm64; fi
+ARCH="$(get_arch)"
 
 if [ -z "$REDIS_VERSION" ];then
   REDIS_VERSION=5.0.6
