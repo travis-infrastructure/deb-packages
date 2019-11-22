@@ -61,7 +61,7 @@ install_packages_bionic(){
   apt-get update
   apt-get install -y software-properties-common
   add-apt-repository universe
-  apt-get install -y --no-install-recommends gcc-8-powerpc-linux-gnu clang-7 libcurl4-gnutls-dev build-essential libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-thread-dev  python3-pip python3-dev libffi-dev libssl-dev libxml2-dev libxslt1-dev libjpeg8-dev zlib1g-dev python3-setuptools wget
+  apt-get install -y --no-install-recommends gcc-8-powerpc-linux-gnu clang-7 libcurl4-gnutls-dev build-essential libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-thread-dev  python3-pip python3-dev libffi-dev libssl-dev libxml2-dev libxslt1-dev libjpeg8-dev zlib1g-dev python3-setuptools wget libc6-dev-powerpc-cross
 }
 
 get_mongodb_src(){
