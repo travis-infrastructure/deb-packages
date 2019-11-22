@@ -61,12 +61,24 @@ install_packages_bionic(){
   apt-get update
   apt-get install -y software-properties-common
   add-apt-repository universe
-  apt-get install -y --no-install-recommends gcc clang-6.0 libcurl4-gnutls-dev build-essential libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-thread-dev  python3-pip python3-dev libffi-dev libssl-dev libxml2-dev libxslt1-dev libjpeg8-dev zlib1g-dev python-setuptools wget
+  apt-get install -y --no-install-recommends gcc clang-6.0 libcurl4-gnutls-dev build-essential libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-thread-dev  python3-pip python3-dev libffi-dev libssl-dev libxml2-dev libxslt1-dev libjpeg8-dev zlib1g-dev python3-setuptools wget
+}
+
+get_mongodb_src(){
+  wget https://fastdl.mongodb.org/src/mongodb-src-r${MONGODB_VERSION}.tar.gz
+  tar -xf mongodb-src-r${MONGODB_VERSION}.tar.gz
+}
+
+build_mongodb_bionic(){
+  get_mongodb_src
+  pushd mongodb-src-r${MONGODB_VERSION}
+  pip3 install -r buildscripts/requirements.txt
+  python3 buildscripts/scons.py --prefix=/opt/mongo install --use-s390x-crc32=off
+  popd
 }
 
 build_mongodb(){
-  wget https://fastdl.mongodb.org/src/mongodb-src-r${MONGODB_VERSION}.tar.gz
-  tar -xf mongodb-src-r${MONGODB_VERSION}.tar.gz
+  get_mongodb_src
   pushd mongodb-src-r${MONGODB_VERSION}
   pip2 install -r buildscripts/requirements.txt
   python2 buildscripts/scons.py --prefix=/opt/mongo install --use-s390x-crc32=off
@@ -74,7 +86,8 @@ build_mongodb(){
 }
 
 call_build_function func_name="install_packages"
-build_mongodb
+call_build_function func_name="build_mongodb"
+
 
 #main
 mkdir "mongodb-${MONGODB_VERSION}~${MONGODB_DEBIAN_VERSION}-${ARCH}"
