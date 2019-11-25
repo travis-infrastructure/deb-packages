@@ -111,19 +111,6 @@ Description: Mongodb database server
 EOF
 }
 
-create_deb_control_file(){
-  cat <<EOF >DEBIAN/control
-Package: mongodb-server
-Version: ${MONGODB_DEBIAN_VERSION_EPOCH}${MONGODB_VERSION}~${MONGODB_DEBIAN_VERSION}
-Section: database
-Priority: optional
-Architecture: ${ARCH}
-Depends: libc6 (>= 2.18), libcurl3 (>= 7.16.2), libgcc1 (>= 1:4.2), libssl1.0.0 (>= 1.0.1), adduser, tzdata
-Maintainer: Artur Rupp <arturrupp@travis-ci.org>
-Description: Mongodb database server
-EOF
-}
-
 call_build_function func_name="install_packages"
 call_build_function func_name="build_mongodb"
 
