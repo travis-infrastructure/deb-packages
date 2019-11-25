@@ -61,11 +61,7 @@ install_packages_bionic(){
   apt-get update
   apt-get install -y software-properties-common
   add-apt-repository universe
-  apt-get install -y --no-install-recommends gcc clang-3.9 libcurl4-gnutls-dev build-essential libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-thread-dev  python2.7 python-pip python-dev libffi-dev libssl-dev libxml2-dev libxslt1-dev libjpeg8-dev zlib1g-dev python-setuptools wget
-  # apt-get update
-  # apt-get install -y software-properties-common
-  # add-apt-repository universe
-  # apt-get install -y --no-install-recommends gcc-8-powerpc-linux-gnu clang-7 libcurl4-gnutls-dev build-essential libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-thread-dev  python3-pip python3-dev libffi-dev libssl-dev libxml2-dev libxslt1-dev libjpeg8-dev zlib1g-dev python3-setuptools wget libc6-dev-powerpc-cross
+  apt-get install -y --no-install-recommends gcc-8-powerpc-linux-gnu clang-7 libcurl4-gnutls-dev build-essential libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-thread-dev  python3-pip python3-dev libffi-dev libssl-dev libxml2-dev libxslt1-dev libjpeg8-dev zlib1g-dev python3-setuptools wget libc6-dev-powerpc-cross gcc-8 g++-8
 }
 
 get_mongodb_src(){
@@ -74,15 +70,10 @@ get_mongodb_src(){
 }
 
 build_mongodb_bionic(){
-  # get_mongodb_src
-  # pushd mongodb-src-r${MONGODB_VERSION}
-  # pip3 install -r buildscripts/requirements.txt
-  # TARGET_ARCH=ppc64le python3 buildscripts/scons.py --prefix=/opt/mongo install
-  # popd
   get_mongodb_src
   pushd mongodb-src-r${MONGODB_VERSION}
-  pip2 install -r buildscripts/requirements.txt
-  python2 buildscripts/scons.py --prefix=/opt/mongo install --use-s390x-crc32=off
+  pip3 install -r buildscripts/requirements.txt
+  TARGET_ARCH=ppc64le python3 buildscripts/scons.py --prefix=/opt/mongo install CC=gcc-8 CXX=g++-8
   popd
 }
 
@@ -92,6 +83,45 @@ build_mongodb(){
   pip2 install -r buildscripts/requirements.txt
   python2 buildscripts/scons.py --prefix=/opt/mongo install --use-s390x-crc32=off
   popd
+}
+
+create_deb_control_file(){
+  cat <<EOF >DEBIAN/control
+Package: mongodb-server
+Version: ${MONGODB_DEBIAN_VERSION_EPOCH}${MONGODB_VERSION}~${MONGODB_DEBIAN_VERSION}
+Section: database
+Priority: optional
+Architecture: ${ARCH}
+Depends: libc6 (>= 2.18), libcurl3 (>= 7.16.2), libgcc1 (>= 1:4.2), libssl1.0.0 (>= 1.0.1), adduser, tzdata
+Maintainer: Artur Rupp <arturrupp@travis-ci.org>
+Description: Mongodb database server
+EOF
+}
+
+create_deb_control_file_bionic(){
+  cat <<EOF >DEBIAN/control
+Package: mongodb-server
+Version: ${MONGODB_DEBIAN_VERSION_EPOCH}${MONGODB_VERSION}~${MONGODB_DEBIAN_VERSION}
+Section: database
+Priority: optional
+Architecture: ${ARCH}
+Depends: libc6 (>= 2.27), libcurl4 (>= 7.58.0), libgcc1 (>= 1:8.3), libssl1.0.0 (>= 1.0.2), adduser, tzdata
+Maintainer: Artur Rupp <arturrupp@travis-ci.org>
+Description: Mongodb database server
+EOF
+}
+
+create_deb_control_file(){
+  cat <<EOF >DEBIAN/control
+Package: mongodb-server
+Version: ${MONGODB_DEBIAN_VERSION_EPOCH}${MONGODB_VERSION}~${MONGODB_DEBIAN_VERSION}
+Section: database
+Priority: optional
+Architecture: ${ARCH}
+Depends: libc6 (>= 2.18), libcurl3 (>= 7.16.2), libgcc1 (>= 1:4.2), libssl1.0.0 (>= 1.0.1), adduser, tzdata
+Maintainer: Artur Rupp <arturrupp@travis-ci.org>
+Description: Mongodb database server
+EOF
 }
 
 call_build_function func_name="install_packages"
@@ -121,16 +151,7 @@ EOF
 
 chmod +x DEBIAN/postinst
 
-cat <<EOF >DEBIAN/control
-Package: mongodb-server
-Version: ${MONGODB_DEBIAN_VERSION_EPOCH}${MONGODB_VERSION}~${MONGODB_DEBIAN_VERSION}
-Section: database
-Priority: optional
-Architecture: ${ARCH}
-Depends: libc6 (>= 2.18), libcurl3 (>= 7.16.2), libgcc1 (>= 1:4.2), libssl1.0.0 (>= 1.0.1), adduser, tzdata
-Maintainer: Artur Rupp <arturrupp@travis-ci.org>
-Description: Mongodb database server
-EOF
+call_build_function func_name="create_deb_control_file"
 
 cat <<\EOF >lib/systemd/system/mongod.service
 [Unit]
